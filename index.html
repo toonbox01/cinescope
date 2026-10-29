@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CineScope - Movies & TV Shows</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#101010;color:#fff}
+header{background:#181818;padding:15px 5%;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.logo{font-size:27px;font-weight:bold;color:#f5c518}
+.logo span{color:#fff}
+.search{flex:1;min-width:180px;display:flex}
+.search input{width:100%;padding:12px;border:0;border-radius:5px 0 0 5px;font-size:15px}
+.search button{padding:12px 18px;border:0;background:#f5c518;font-weight:bold;border-radius:0 5px 5px 0;cursor:pointer}
+nav{background:#232323;padding:13px 5%;display:flex;gap:25px;overflow-x:auto}
+nav a{color:white;text-decoration:none;font-weight:bold;white-space:nowrap}
+nav a:hover{color:#f5c518}
+.hero{padding:35px 5%;background:linear-gradient(90deg,#101010,#252525)}
+.hero h1{font-size:34px;margin-bottom:12px}
+.hero p{color:#ccc;line-height:1.6}
+.container{padding:28px 5%}
+.section-title{border-left:5px solid #f5c518;padding-left:12px;margin-bottom:20px;font-size:24px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.filters button{padding:9px 15px;background:#292929;color:#fff;border:1px solid #444;border-radius:20px;cursor:pointer}
+.filters button.active,.filters button:hover{background:#f5c518;color:#111}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:20px}
+.card{background:#1c1c1c;border-radius:8px;overflow:hidden;transition:.2s;cursor:pointer}
+.card:hover{transform:translateY(-5px);box-shadow:0 5px 20px #000}
+.card img{width:100%;height:245px;object-fit:cover;background:#333}
+.info{padding:12px}
+.rating{color:#f5c518;margin-bottom:8px;font-size:14px}
+.info h3{font-size:15px;margin-bottom:7px}
+.info p{font-size:12px;color:#aaa}
+.badge{display:inline-block;background:#333;color:#ddd;padding:4px 7px;border-radius:3px;font-size:11px;margin-top:9px}
+.empty{color:#aaa;padding:25px 0}
+footer{background:#181818;text-align:center;padding:30px 5%;color:#aaa;line-height:2;margin-top:30px}
+footer a{color:#f5c518}
+.modal{display:none;position:fixed;inset:0;background:#000d;z-index:10;justify-content:center;align-items:center;padding:20px}
+.modal-box{background:#222;max-width:550px;width:100%;padding:25px;border-radius:10px;max-height:90vh;overflow:auto}
+.modal-box img{width:130px;float:left;margin:0 18px 12px 0;border-radius:5px}
+.close{float:right;background:#f5c518;border:0;padding:8px 12px;cursor:pointer}
+@media(max-width:500px){header{gap:12px}.hero h1{font-size:27px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card img{height:220px}.container{padding:22px 4%}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">CINE<span>SCOPE</span></div>
+  <div class="search">
+    <input id="searchInput" type="search" placeholder="Search movies and TV shows...">
+    <button onclick="searchMovies()">Search</button>
+  </div>
+</header>
+
+<nav>
+  <a href="#" onclick="showSection('all');return false">Home</a>
+  <a href="#movies" onclick="showSection('movie');return false">Movies</a>
+  <a href="#movies" onclick="showSection('series');return false">TV Shows</a>
+  <a href="#top">Top Rated</a>
+  <a href="#about">About</a>
+</nav>
+
+<section class="hero">
+  <h1>Discover Movies & TV Shows</h1>
+  <p>Explore movies, discover stories, and find your next favourite film.</p>
+</section>
+
+<main class="container" id="movies">
+  <h2 class="section-title">Explore Titles</h2>
+  <div class="filters">
+    <button class="active" onclick="filterMovies('all',this)">All</button>
+    <button onclick="filterMovies('movie',this)">Movies</button>
+    <button onclick="filterMovies('series',this)">TV Shows</button>
+  </div>
+  <div class="grid" id="movieGrid"></div>
+  <p id="emptyMessage" class="empty" style="display:none">No titles found. Try another search.</p>
+</main>
+
+<section class="container" id="top">
+  <h2 class="section-title">Top Rated Picks</h2>
+  <p style="color:#aaa;line-height:1.8">Browse our featured titles and explore their ratings and descriptions.</p>
+</section>
+
+<footer id="about">
+  <div class="logo">CINE<span>SCOPE</span></div>
+  <p>Your destination for discovering movies and TV shows.</p>
+  <p>Movie data and images are illustrative demo content.</p>
+  <p>© 2026 CineScope. All rights reserved.</p>
+</footer>
+
+<div class="modal" id="movieModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box" id="modalContent">
+    <button class="close" onclick="closeModal()">Close ✕</button>
+    <div style="clear:both"></div>
+  </div>
+</div>
+
+<script>
+const movies=[
+{title:"The Dark Knight",year:2008,rating:"9.0",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",description:"Batman faces a dangerous criminal who threatens Gotham City."},
+{title:"Inception",year:2010,rating:"8.8",type:"movie",genre:"Sci-Fi",poster:"https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",description:"A skilled thief enters people's dreams to steal secrets."},
+{title:"Interstellar",year:2014,rating:"8.7",type:"movie",genre:"Sci-Fi",poster:"https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",description:"Explorers travel beyond Earth in search of a future for humanity."},
+{title:"Avatar",year:2009,rating:"7.9",type:"movie",genre:"Fantasy",poster:"https://image.tmdb.org/t/p/w500/kyeqWdyUXW608qlYkRqosgbbJyK.jpg",description:"A former Marine discovers a new world and its people."},
+{title:"The Avengers",year:2012,rating:"8.0",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",description:"Earth's mightiest heroes unite to face a powerful threat."},
+{title:"Joker",year:2019,rating:"8.4",type:"movie",genre:"Drama",poster:"https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",description:"A troubled comedian's life takes a dark turn."},
+{title:"Dune: Part Two",year:2024,rating:"8.5",type:"movie",genre:"Sci-Fi",poster:"https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",description:"Paul Atreides joins the Fremen on a journey of destiny."},
+{title:"The Batman",year:2022,rating:"7.8",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg",description:"Batman investigates corruption and a series of mysterious crimes."},
+{title:"Breaking Bad",year:2008,rating:"9.5",type:"series",genre:"Drama",poster:"https://image.tmdb.org/t/p/w500/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",description:"A chemistry teacher becomes involved in the drug trade."},
+{title:"Stranger Things",year:2016,rating:"8.7",type:"series",genre:"Fantasy",poster:"https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",description:"A group of friends encounter supernatural mysteries in their town."},
+{title:"Wednesday",year:2022,rating:"8.0",type:"series",genre:"Mystery",poster:"https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg",description:"Wednesday Addams investigates strange events at her school."},
+{title:"Sherlock",year:2010,rating:"9.1",type:"series",genre:"Mystery",poster:"https://image.tmdb.org/t/p/w500/7WTsnHkbA0FaG6R9twfFde0I9hl.jpg",description:"Sherlock Holmes solves complex crimes in modern London."}
+];
+
+let currentType="all";
+let currentSearch="";
+
+function renderMovies(){
+const grid=document.getElementById("movieGrid");
+grid.innerHTML="";
+const filtered=movies.filter(m=>
+(currentType==="all"||m.type===currentType)&&
+m.title.toLowerCase().includes(currentSearch.toLowerCase())
+);
+document.getElementById("emptyMessage").style.display=filtered.length?"none":"block";
+filtered.forEach(m=>{
+const card=document.createElement("article");
+card.className="card";
+card.innerHTML=`
+<img src="${m.poster}" alt="${m.title} poster" loading="lazy" onerror="this.src='https://placehold.co/300x450/222/f5c518?text=No+Poster'">
+<div class="info">
+<div class="rating">★ ${m.rating}</div>
+<h3>${m.title}</h3>
+<p>${m.year}</p>
+<span class="badge">${m.type==="movie"?"MOVIE":"TV SERIES"}</span>
+</div>`;
+card.onclick=()=>openModal(m);
+grid.appendChild(card);
+});
+}
+
+function filterMovies(type,button){
+currentType=type;
+document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
+button.classList.add("active");
+renderMovies();
+}
+
+function showSection(type){
+currentType=type;
+document.querySelectorAll(".filters button").forEach(b=>{
+b.classList.toggle("active",b.textContent.toLowerCase()===(type==="all"?"all":type==="movie"?"movies":"tv shows"));
+});
+renderMovies();
+document.getElementById("movies").scrollIntoView({behavior:"smooth"});
+}
+
+function searchMovies(){
+currentSearch=document.getElementById("searchInput").value.trim();
+renderMovies();
+document.getElementById("movies").scrollIntoView({behavior:"smooth"});
+}
+
+document.getElementById("searchInput").addEventListener("input",()=>{
+currentSearch=document.getElementById("searchInput").value.trim();
+renderMovies();
+});
+
+function openModal(m){
+document.getElementById("modalContent").innerHTML=`
+<button class="close" onclick="closeModal()">Close ✕</button>
+<div style="clear:both;height:15px"></div>
+<img src="${m.poster}" alt="${m.title} poster">
+<h2>${m.title}</h2>
+<p style="color:#f5c518;margin:12px 0">★ ${m.rating}/10</p>
+<p style="color:#bbb;margin-bottom:12px">${m.year} · ${m.genre} · ${m.type==="movie"?"Movie":"TV Series"}</p>
+<p style="line-height:1.7;color:#eee">${m.description}</p>
+<div style="clear:both"></div>`;
+document.getElementById("movieModal").style.display="flex";
+}
+
+function closeModal(){
+document.getElementById("movieModal").style.display="none";
+}
+
+renderMovies();
+</script>
+</body>
+</html>
