@@ -3,205 +3,599 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CineScope - Movies & TV Shows</title>
+<meta name="description" content="Discover movies and TV shows on CineScope. Explore ratings, release years and movie details.">
+<title>CineScope — Discover Movies & TV Shows</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#101010;color:#fff}
-header{background:#181818;padding:15px 5%;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.logo{font-size:27px;font-weight:bold;color:#f5c518}
-.logo span{color:#fff}
-.search{flex:1;min-width:180px;display:flex}
-.search input{width:100%;padding:12px;border:0;border-radius:5px 0 0 5px;font-size:15px}
-.search button{padding:12px 18px;border:0;background:#f5c518;font-weight:bold;border-radius:0 5px 5px 0;cursor:pointer}
-nav{background:#232323;padding:13px 5%;display:flex;gap:25px;overflow-x:auto}
-nav a{color:white;text-decoration:none;font-weight:bold;white-space:nowrap}
-nav a:hover{color:#f5c518}
-.hero{padding:35px 5%;background:linear-gradient(90deg,#101010,#252525)}
-.hero h1{font-size:34px;margin-bottom:12px}
-.hero p{color:#ccc;line-height:1.6}
-.container{padding:28px 5%}
-.section-title{border-left:5px solid #f5c518;padding-left:12px;margin-bottom:20px;font-size:24px}
-.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
-.filters button{padding:9px 15px;background:#292929;color:#fff;border:1px solid #444;border-radius:20px;cursor:pointer}
-.filters button.active,.filters button:hover{background:#f5c518;color:#111}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:20px}
-.card{background:#1c1c1c;border-radius:8px;overflow:hidden;transition:.2s;cursor:pointer}
-.card:hover{transform:translateY(-5px);box-shadow:0 5px 20px #000}
-.card img{width:100%;height:245px;object-fit:cover;background:#333}
-.info{padding:12px}
-.rating{color:#f5c518;margin-bottom:8px;font-size:14px}
-.info h3{font-size:15px;margin-bottom:7px}
-.info p{font-size:12px;color:#aaa}
-.badge{display:inline-block;background:#333;color:#ddd;padding:4px 7px;border-radius:3px;font-size:11px;margin-top:9px}
-.empty{color:#aaa;padding:25px 0}
-footer{background:#181818;text-align:center;padding:30px 5%;color:#aaa;line-height:2;margin-top:30px}
-footer a{color:#f5c518}
-.modal{display:none;position:fixed;inset:0;background:#000d;z-index:10;justify-content:center;align-items:center;padding:20px}
-.modal-box{background:#222;max-width:550px;width:100%;padding:25px;border-radius:10px;max-height:90vh;overflow:auto}
-.modal-box img{width:130px;float:left;margin:0 18px 12px 0;border-radius:5px}
-.close{float:right;background:#f5c518;border:0;padding:8px 12px;cursor:pointer}
-@media(max-width:500px){header{gap:12px}.hero h1{font-size:27px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card img{height:220px}.container{padding:22px 4%}}
+:root {
+  --bg: #101114;
+  --panel: #1b1c22;
+  --text: #f5f5f5;
+  --muted: #a5a6b0;
+  --accent: #f5c518;
+  --border: #30313a;
+}
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+header {
+  background: #191a20;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.nav {
+  max-width: 1200px;
+  margin: auto;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.logo {
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+.logo span { color: var(--accent); }
+.nav a {
+  color: white;
+  text-decoration: none;
+}
+.hero {
+  text-align: center;
+  padding: 48px 20px 35px;
+  background: linear-gradient(180deg, #292719, var(--bg));
+}
+.hero h1 {
+  font-size: clamp(30px, 5vw, 48px);
+  margin: 0 0 12px;
+}
+.hero h1 span { color: var(--accent); }
+.hero p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+.search-area {
+  max-width: 650px;
+  margin: 25px auto 0;
+  display: flex;
+  gap: 10px;
+}
+input, select {
+  background: #22232a;
+  border: 1px solid #42434b;
+  color: white;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 15px;
+}
+input { width: 100%; outline: none; }
+input:focus { border-color: var(--accent); }
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 25px 20px 50px;
+}
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.section-heading h2 { margin: 0; font-size: 24px; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.filters button {
+  background: #24252c;
+  border: 1px solid #41424a;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.filters button.active,
+.filters button:hover {
+  background: var(--accent);
+  color: #111;
+  border-color: var(--accent);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 22px 16px;
+}
+.card {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid #292a31;
+  cursor: pointer;
+  transition: transform .2s, border-color .2s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+}
+.poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  display: block;
+  background: #30313a;
+}
+.poster-fallback {
+  aspect-ratio: 2 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  text-align: center;
+  color: var(--muted);
+}
+.info { padding: 12px; }
+.rating {
+  color: var(--accent);
+  font-size: 14px;
+  margin-bottom: 9px;
+}
+.card h3 {
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 0 0 8px;
+  overflow-wrap: anywhere;
+}
+.meta {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: .6px;
+  border: 1px solid #55565e;
+  color: #ddd;
+  border-radius: 4px;
+  padding: 4px 6px;
+}
+#resultCount { color: var(--muted); font-size: 13px; }
+#emptyMessage {
+  display: none;
+  text-align: center;
+  padding: 45px 10px;
+  color: var(--muted);
+}
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+footer strong { color: var(--accent); }
+
+/* Movie details popup */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0,0,0,.85);
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.modal.show { display: flex; }
+.modal-content {
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #1c1d23;
+  border: 1px solid #3a3b43;
+  border-radius: 14px;
+  padding: 22px;
+  position: relative;
+}
+.close {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  border: 0;
+  background: #33343b;
+  color: white;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 24px;
+  cursor: pointer;
+}
+.modal-layout {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 22px;
+  margin-top: 25px;
+}
+.modal-poster {
+  width: 100%;
+  border-radius: 8px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  background: #30313a;
+}
+.modal-content h2 { margin-top: 0; padding-right: 35px; }
+.modal-content p { line-height: 1.7; color: #c9c9d0; }
+.modal-rating { color: var(--accent); font-weight: bold; }
+@media(max-width:900px) {
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media(max-width:600px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 12px; }
+  .nav { padding: 13px 15px; }
+  .hero { padding-top: 35px; }
+  main { padding: 22px 14px 40px; }
+  .section-heading h2 { font-size: 21px; }
+  .modal-layout { grid-template-columns: 110px 1fr; gap: 14px; }
+  .modal-content { padding: 16px; }
+}
 </style>
 </head>
-<body>
 
+<body>
 <header>
-  <div class="logo">CINE<span>SCOPE</span></div>
-  <div class="search">
-    <input id="searchInput" type="search" placeholder="Search movies and TV shows...">
-    <button onclick="searchMovies()">Search</button>
+  <div class="nav">
+    <a href="#" class="logo">CINE<span>SCOPE</span></a>
+    <a href="#movies">Discover</a>
   </div>
 </header>
 
-<nav>
-  <a href="#" onclick="showSection('all');return false">Home</a>
-  <a href="#movies" onclick="showSection('movie');return false">Movies</a>
-  <a href="#movies" onclick="showSection('series');return false">TV Shows</a>
-  <a href="#top">Top Rated</a>
-  <a href="#about">About</a>
-</nav>
-
 <section class="hero">
-  <h1>Discover Movies & TV Shows</h1>
-  <p>Explore movies, discover stories, and find your next favourite film.</p>
+  <h1>Discover Your Next <span>Favorite</span></h1>
+  <p>Explore movies, TV shows, ratings and stories — all in one place.</p>
+  <div class="search-area">
+    <input id="searchInput" type="search"
+      placeholder="Search movies or TV shows..."
+      aria-label="Search movies and TV shows">
+  </div>
 </section>
 
-<main class="container" id="movies">
-  <h2 class="section-title">Explore Titles</h2>
-  <div class="filters">
-    <button class="active" onclick="filterMovies('all',this)">All</button>
-    <button onclick="filterMovies('movie',this)">Movies</button>
-    <button onclick="filterMovies('series',this)">TV Shows</button>
+<main id="movies">
+  <div class="section-heading">
+    <h2>🎬 Explore Titles</h2>
+    <span id="resultCount"></span>
   </div>
+
+  <div class="section-heading">
+    <div class="filters">
+      <button class="active" data-type="all">All</button>
+      <button data-type="movie">Movies</button>
+      <button data-type="tv">TV Series</button>
+    </div>
+    <select id="sortSelect" aria-label="Sort titles">
+      <option value="popular">Top Rated</option>
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+      <option value="az">Name A–Z</option>
+    </select>
+  </div>
+
   <div class="grid" id="movieGrid"></div>
-  <p id="emptyMessage" class="empty" style="display:none">No titles found. Try another search.</p>
+  <div id="emptyMessage">No titles found. Try another search.</div>
 </main>
 
-<section class="container" id="top">
-  <h2 class="section-title">Top Rated Picks</h2>
-  <p style="color:#aaa;line-height:1.8">Browse our featured titles and explore their ratings and descriptions.</p>
-</section>
-
-<footer id="about">
-  <div class="logo">CINE<span>SCOPE</span></div>
-  <p>Your destination for discovering movies and TV shows.</p>
-  <p>Movie data and images are illustrative demo content.</p>
-  <p>© 2026 CineScope. All rights reserved.</p>
+<footer>
+  <strong>CineScope</strong> — Your Movie Discovery Hub<br>
+  Movie information and ratings are provided for discovery purposes.<br>
+  © <span id="year"></span> CineScope. All rights reserved.
 </footer>
 
-<div class="modal" id="movieModal" onclick="if(event.target===this)closeModal()">
-  <div class="modal-box" id="modalContent">
-    <button class="close" onclick="closeModal()">Close ✕</button>
-    <div style="clear:both"></div>
+<div class="modal" id="movieModal" role="dialog"
+  aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <button class="close" id="closeModal" aria-label="Close details">×</button>
+    <div id="modalDetails"></div>
   </div>
 </div>
 
 <script>
-const movies=[
-{title:"The Dark Knight",year:2008,rating:"9.0",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",description:"Batman faces a dangerous criminal who threatens Gotham City."},
-{title:"Inception",year:2010,rating:"8.8",type:"movie",genre:"Sci-Fi",poster:"https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",description:"A skilled thief enters people's dreams to steal secrets."},
-{title:"Interstellar",year:2014,rating:"8.7",type:"movie",genre:"Sci-Fi",poster:"https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",description:"Explorers travel beyond Earth in search of a future for humanity."},
-{title:"Avatar",year:2009,rating:"7.9",type:"movie",genre:"Fantasy",poster:"https://image.tmdb.org/t/p/w500/kyeqWdyUXW608qlYkRqosgbbJyK.jpg",description:"A former Marine discovers a new world and its people."},
-{title:"The Avengers",year:2012,rating:"8.0",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",description:"Earth's mightiest heroes unite to face a powerful threat."},
-{title:"Joker",year:2019,rating:"8.4",type:"movie",genre:"Drama",poster:"https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",description:"A troubled comedian's life takes a dark turn."},
-{title:"Dune: Part Two",year:2024,rating:"8.5",type:"movie",genre:"Sci-Fi",poster:"https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",description:"Paul Atreides joins the Fremen on a journey of destiny."},
-{title:"The Batman",year:2022,rating:"7.8",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg",description:"Batman investigates corruption and a series of mysterious crimes."},
-{title:"Breaking Bad",year:2008,rating:"9.5",type:"series",genre:"Drama",poster:"https://image.tmdb.org/t/p/w500/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",description:"A chemistry teacher becomes involved in the drug trade."},
-{title:"Stranger Things",year:2016,rating:"8.7",type:"series",genre:"Fantasy",poster:"https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",description:"A group of friends encounter supernatural mysteries in their town."},
-{title:"Wednesday",year:2022,rating:"8.0",type:"series",genre:"Mystery",poster:"https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg",description:"Wednesday Addams investigates strange events at her school."},
-{title:"Sherlock",year:2010,rating:"9.1",type:"series",genre:"Mystery",poster:"https://image.tmdb.org/t/p/w500/7WTsnHkbA0FaG6R9twfFde0I9hl.jpg",description:"Sherlock Holmes solves complex crimes in modern London."}
-{title:"3 Idiots",year:2009,rating:"8.4",type:"movie",genre:"Comedy",poster:"https://image.tmdb.org/t/p/w500/66A9MqXOyVFCssoloscw79z8Tew.jpg",description:"Three engineering students learn about friendship and life."},
-{title:"RRR",year:2022,rating:"7.8",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/nEufeZlyAOLqO2brrs0yeF1lgXO.jpg",description:"Two revolutionaries fight for freedom and friendship."},
-{title:"Pushpa 2: The Rule",year:2024,rating:"6.2",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/1I1eV4Z9H8Q7n5c9x3p2q8.jpg",description:"Pushpa faces new challenges in the world of red sandalwood."},
-{title:"Kantara",year:2022,rating:"8.2",type:"movie",genre:"Drama",poster:"https://image.tmdb.org/t/p/w500/1F2fYJY4W5h3J6N7Q8P9R0S1T2U.jpg",description:"A village story involving traditions and mysterious forces."},
-{title:"K.G.F: Chapter 2",year:2022,rating:"8.2",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/khNVygolU0TxLIDWff5tQlAhZ23.jpg",description:"Rocky faces powerful enemies as his empire grows."},
-{title:"Sita Ramam",year:2022,rating:"8.5",type:"movie",genre:"Romance",poster:"https://image.tmdb.org/t/p/w500/5rIk6w4yS4k1Q7p9N3x8B2m6V0a.jpg",description:"A mysterious letter connects a soldier and a young woman."},
-{title:"Drishyam",year:2015,rating:"8.2",type:"movie",genre:"Thriller",poster:"https://image.tmdb.org/t/p/w500/4S5v6F7g8H9j0K1l2M3n4O5p6Q7.jpg",description:"A family man tries to protect his family from a criminal investigation."},
-{title:"Dangal",year:2016,rating:"8.3",type:"movie",genre:"Drama",poster:"https://image.tmdb.org/t/p/w500/8D3E3s1Q0f8g4P5L6K7J2H9M1N.jpg",description:"A former wrestler trains his daughters to become champions."},
-{title:"Jawan",year:2023,rating:"7.0",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/jFt1gS4BGHlK8xt76Y81Alp4dbt.jpg",description:"A man fights corruption and injustice through daring missions."},
-{title:"12th Fail",year:2023,rating:"8.7",type:"movie",genre:"Drama",poster:"https://image.tmdb.org/t/p/w500/k3waqVXSnvCZWfJYNtdamTgTtTA.jpg",description:"A young man overcomes difficulties while preparing for civil services."},
-{title:"The Shawshank Redemption",year:1994,rating:"9.3",type:"movie",genre:"Drama",poster:"https://image.tmdb.org/t/p/w500/9cjIGR2Tz0d4VY5K6f7G8H9J0KL.jpg",description:"Two prisoners build an unexpected friendship over many years."},
-{title:"Oppenheimer",year:2023,rating:"8.3",type:"movie",genre:"Drama",poster:"https://image.tmdb.org/t/p/w500/ptpr0kGAckfQkJeJIt8st5dglvd.jpg",description:"The story of the scientist who helped develop the atomic bomb."},
-{title:"Spider-Man: No Way Home",year:2021,rating:"8.2",type:"movie",genre:"Action",poster:"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",description:"Spider-Man faces a multiverse crisis that changes his life."},
-{title:"Titanic",year:1997,rating:"7.9",type:"movie",genre:"Romance",poster:"https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",description:"A romance unfolds aboard the ill-fated Titanic."},
-{title:"The Conjuring",year:2013,rating:"7.5",type:"movie",genre:"Horror",poster:"https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg",description:"Paranormal investigators help a family facing terrifying events."},
-{title:"The Lion King",year:1994,rating:"8.5",type:"movie",genre:"Animation",poster:"https://image.tmdb.org/t/p/w500/sKCr78MXSLixwmZ8DyJLrpMsd15.jpg",description:"A young lion learns to accept his destiny as king."},
-{title:"Chhaava",year:2025,rating:"7.0",type:"movie",genre:"History",poster:"https://placehold.co/300x450/222/f5c518?text=Chhaava",description:"A historical drama about Chhatrapati Sambhaji Maharaj."},
-{title:"Pratikshya",year:2022,rating:"7.5",type:"movie",genre:"Drama",poster:"https://placehold.co/300x450/222/f5c518?text=Pratikshya",description:"An Odia family drama about hope, responsibility and family."},
-{title:"Daman",year:2022,rating:"8.0",type:"movie",genre:"Drama",poster:"https://placehold.co/300x450/222/f5c518?text=Daman",description:"An Odia doctor works to bring healthcare to a remote region."},
-{title:"Sita Bibaha",year:1936,rating:"7.0",type:"movie",genre:"Classic",poster:"https://placehold.co/300x450/222/f5c518?text=Sita+Bibaha",description:"An early landmark in Odia cinema."}
+"use strict";
+
+const movies = [
+  {
+    title:"Dangal", year:2016, rating:8.3, type:"movie",
+    genre:"Drama, Sport",
+    poster:"https://image.tmdb.org/t/p/w500/7Gzja9yHI3KX0gkuFqx8S6s7L7w.jpg",
+    description:"A former wrestler trains his daughters to become competitive wrestlers and pursue his dream of winning a gold medal."
+  },
+  {
+    title:"3 Idiots", year:2009, rating:8.4, type:"movie",
+    genre:"Comedy, Drama",
+    poster:"https://image.tmdb.org/t/p/w500/66A9MqXOyVFCssoloscw79z8Tew.jpg",
+    description:"Three engineering students challenge the pressures of college life while discovering friendship and their own paths."
+  },
+  {
+    title:"12th Fail", year:2023, rating:8.7, type:"movie",
+    genre:"Drama",
+    poster:"https://image.tmdb.org/t/p/w500/k3waqVXSnvCZWfJYNtdamTgTtTA.jpg",
+    description:"A young man from a difficult background works hard to overcome setbacks and pursue his dream of becoming an officer."
+  },
+  {
+    title:"Jawan", year:2023, rating:7.0, type:"movie",
+    genre:"Action, Thriller",
+    poster:"https://image.tmdb.org/t/p/w500/jFt1gS4BGHlK8xt76Y81Alp4dbt.jpg",
+    description:"A man takes on a series of missions while confronting corruption and fighting for justice."
+  },
+  {
+    title:"Pathaan", year:2023, rating:5.8, type:"movie",
+    genre:"Action, Thriller",
+    poster:"https://image.tmdb.org/t/p/w500/arf00BkwvXo0CFKbaD9Wv7QO7K4.jpg",
+    description:"An Indian agent returns to face a dangerous threat that puts the country at risk."
+  },
+  {
+    title:"The Shawshank Redemption", year:1994, rating:9.3, type:"movie",
+    genre:"Drama",
+    poster:"https://image.tmdb.org/t/p/w500/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
+    description:"Two prisoners form a lasting friendship while holding on to hope during years of incarceration."
+  },
+  {
+    title:"Inception", year:2010, rating:8.8, type:"movie",
+    genre:"Sci-Fi, Action",
+    poster:"https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",
+    description:"A skilled thief who enters people's dreams is offered a chance to erase his past through one difficult mission."
+  },
+  {
+    title:"Interstellar", year:2014, rating:8.7, type:"movie",
+    genre:"Sci-Fi, Drama",
+    poster:"https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+    description:"Explorers travel beyond Earth in search of a future for humanity as a planet faces a global crisis."
+  },
+  {
+    title:"Titanic", year:1997, rating:7.9, type:"movie",
+    genre:"Romance, Drama",
+    poster:"https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
+    description:"Two young people from different backgrounds fall in love aboard the ill-fated ocean liner Titanic."
+  },
+  {
+    title:"Avengers: Endgame", year:2019, rating:8.4, type:"movie",
+    genre:"Action, Adventure",
+    poster:"https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
+    description:"The remaining Avengers unite for one last effort to restore the universe after a devastating loss."
+  },
+  {
+    title:"Spider-Man: No Way Home", year:2021, rating:8.2, type:"movie",
+    genre:"Action, Adventure",
+    poster:"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+    description:"Peter Parker seeks help after his identity becomes public, but a spell brings unexpected visitors from other worlds."
+  },
+  {
+    title:"Oppenheimer", year:2023, rating:8.3, type:"movie",
+    genre:"Drama, History",
+    poster:"https://image.tmdb.org/t/p/w500/ptpr0kGAckfQkJeJIt8st5dglvd.jpg",
+    description:"A biographical drama about physicist J. Robert Oppenheimer and the development of the atomic bomb."
+  },
+  {
+    title:"The Lion King", year:1994, rating:8.5, type:"movie",
+    genre:"Animation, Adventure",
+    poster:"https://image.tmdb.org/t/p/w500/sKCr78MXSLixwmZ8DyJLrpMsd15.jpg",
+    description:"A young lion prince faces loss and learns what it means to take his place in the circle of life."
+  },
+  {
+    title:"The Conjuring", year:2013, rating:7.5, type:"movie",
+    genre:"Horror, Mystery",
+    poster:"https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg",
+    description:"Paranormal investigators help a family facing disturbing events in their farmhouse."
+  },
+  {
+    title:"Chhaava", year:2025, rating:7.0, type:"movie",
+    genre:"Action, History",
+    poster:"https://image.tmdb.org/t/p/w500/placeholder.jpg",
+    description:"A historical action drama inspired by the life and legacy of Chhatrapati Sambhaji Maharaj."
+  },
+  {
+    title:"Wednesday", year:2022, rating:8.0, type:"tv",
+    genre:"Mystery, Comedy",
+    poster:"https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg",
+    description:"Wednesday Addams investigates mysterious events at her unusual new school while discovering her own abilities."
+  },
+  {
+    title:"Stranger Things", year:2016, rating:8.6, type:"tv",
+    genre:"Sci-Fi, Horror",
+    poster:"https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
+    description:"A group of friends in a small town encounters strange experiments and frightening forces from another dimension."
+  },
+  {
+    title:"Breaking Bad", year:2008, rating:9.5, type:"tv",
+    genre:"Crime, Drama",
+    poster:"https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+    description:"A chemistry teacher facing a serious illness enters the criminal world and makes increasingly dangerous choices."
+  },
+  {
+    title:"Game of Thrones", year:2011, rating:9.2, type:"tv",
+    genre:"Fantasy, Drama",
+    poster:"https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg",
+    description:"Powerful families compete for control of a kingdom while an ancient threat grows beyond the northern frontier."
+  },
+  {
+    title:"Squid Game", year:2021, rating:7.9, type:"tv",
+    genre:"Thriller, Drama",
+    poster:"https://image.tmdb.org/t/p/w500/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg",
+    description:"People struggling with debt enter a mysterious contest where children's games have deadly consequences."
+  }
 ];
 
-let currentType="all";
-let currentSearch="";
+const grid = document.getElementById("movieGrid");
+const searchInput = document.getElementById("searchInput");
+const sortSelect = document.getElementById("sortSelect");
+const emptyMessage = document.getElementById("emptyMessage");
+const resultCount = document.getElementById("resultCount");
+const modal = document.getElementById("movieModal");
+const modalDetails = document.getElementById("modalDetails");
 
-function renderMovies(){
-const grid=document.getElementById("movieGrid");
-grid.innerHTML="";
-const filtered=movies.filter(m=>
-(currentType==="all"||m.type===currentType)&&
-m.title.toLowerCase().includes(currentSearch.toLowerCase())
-);
-document.getElementById("emptyMessage").style.display=filtered.length?"none":"block";
-filtered.forEach(m=>{
-const card=document.createElement("article");
-card.className="card";
-card.innerHTML=`
-<img src="${m.poster}" alt="${m.title} poster" loading="lazy" onerror="this.src='https://placehold.co/300x450/222/f5c518?text=No+Poster'">
-<div class="info">
-<div class="rating">★ ${m.rating}</div>
-<h3>${m.title}</h3>
-<p>${m.year}</p>
-<span class="badge">${m.type==="movie"?"MOVIE":"TV SERIES"}</span>
-</div>`;
-card.onclick=()=>openModal(m);
-grid.appendChild(card);
+let currentType = "all";
+let currentSearch = "";
+
+function makePoster(movie, className) {
+  const img = document.createElement("img");
+  img.className = className;
+  img.src = movie.poster;
+  img.alt = movie.title + " poster";
+  img.loading = "lazy";
+  img.onerror = function() {
+    const fallback = document.createElement("div");
+    fallback.className = "poster-fallback";
+    fallback.textContent = movie.title;
+    this.replaceWith(fallback);
+  };
+  return img;
+}
+
+function renderMovies() {
+  grid.replaceChildren();
+
+  let filtered = movies.filter(function(movie) {
+    const matchesType =
+      currentType === "all" || movie.type === currentType;
+    const text = (
+      movie.title + " " + movie.genre + " " + movie.year
+    ).toLowerCase();
+    return matchesType && text.includes(currentSearch.toLowerCase());
+  });
+
+  if (sortSelect.value === "popular") {
+    filtered.sort((a, b) => b.rating - a.rating);
+  } else if (sortSelect.value === "newest") {
+    filtered.sort((a, b) => b.year - a.year);
+  } else if (sortSelect.value === "oldest") {
+    filtered.sort((a, b) => a.year - b.year);
+  } else if (sortSelect.value === "az") {
+    filtered.sort((a, b) => a.title.localeCompare(b.title));
+  }
+
+  resultCount.textContent = filtered.length + " titles";
+  emptyMessage.style.display = filtered.length ? "none" : "block";
+
+  filtered.forEach(function(movie) {
+    const card = document.createElement("article");
+    card.className = "card";
+    card.tabIndex = 0;
+
+    card.appendChild(makePoster(movie, "poster"));
+
+    const info = document.createElement("div");
+    info.className = "info";
+
+    const rating = document.createElement("div");
+    rating.className = "rating";
+    rating.textContent = "★ " + movie.rating.toFixed(1);
+
+    const title = document.createElement("h3");
+    title.textContent = movie.title;
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.textContent = movie.year + " · " + movie.genre;
+
+    const badge = document.createElement("span");
+    badge.className = "badge";
+    badge.textContent = movie.type === "movie" ? "MOVIE" : "TV SERIES";
+
+    info.append(rating, title, meta, badge);
+    card.appendChild(info);
+
+    card.addEventListener("click", function() {
+      openModal(movie);
+    });
+    card.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") openModal(movie);
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+function openModal(movie) {
+  modalDetails.replaceChildren();
+
+  const layout = document.createElement("div");
+  layout.className = "modal-layout";
+
+  layout.appendChild(makePoster(movie, "modal-poster"));
+
+  const details = document.createElement("div");
+
+  const title = document.createElement("h2");
+  title.id = "modalTitle";
+  title.textContent = movie.title;
+
+  const rating = document.createElement("p");
+  rating.className = "modal-rating";
+  rating.textContent = "★ " + movie.rating.toFixed(1) + " / 10";
+
+  const meta = document.createElement("p");
+  meta.textContent = movie.year + " · " +
+    (movie.type === "movie" ? "Movie" : "TV Series");
+
+  const genre = document.createElement("p");
+  genre.textContent = "Genre: " + movie.genre;
+
+  const description = document.createElement("p");
+  description.textContent = movie.description;
+
+  details.append(title, rating, meta, genre, description);
+  layout.appendChild(details);
+  modalDetails.appendChild(layout);
+
+  modal.classList.add("show");
+  document.body.style.overflow = "hidden";
+  document.getElementById("closeModal").focus();
+}
+
+function closeModal() {
+  modal.classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+searchInput.addEventListener("input", function(event) {
+  currentSearch = event.target.value.trim();
+  renderMovies();
 });
-}
 
-function filterMovies(type,button){
-currentType=type;
-document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
-button.classList.add("active");
-renderMovies();
-}
+sortSelect.addEventListener("change", renderMovies);
 
-function showSection(type){
-currentType=type;
-document.querySelectorAll(".filters button").forEach(b=>{
-b.classList.toggle("active",b.textContent.toLowerCase()===(type==="all"?"all":type==="movie"?"movies":"tv shows"));
-});
-renderMovies();
-document.getElementById("movies").scrollIntoView({behavior:"smooth"});
-}
-
-function searchMovies(){
-currentSearch=document.getElementById("searchInput").value.trim();
-renderMovies();
-document.getElementById("movies").scrollIntoView({behavior:"smooth"});
-}
-
-document.getElementById("searchInput").addEventListener("input",()=>{
-currentSearch=document.getElementById("searchInput").value.trim();
-renderMovies();
+document.querySelectorAll(".filters button").forEach(function(button) {
+  button.addEventListener("click", function() {
+    document.querySelectorAll(".filters button").forEach(function(item) {
+      item.classList.remove("active");
+    });
+    button.classList.add("active");
+    currentType = button.dataset.type;
+    renderMovies();
+  });
 });
 
-function openModal(m){
-document.getElementById("modalContent").innerHTML=`
-<button class="close" onclick="closeModal()">Close ✕</button>
-<div style="clear:both;height:15px"></div>
-<img src="${m.poster}" alt="${m.title} poster">
-<h2>${m.title}</h2>
-<p style="color:#f5c518;margin:12px 0">★ ${m.rating}/10</p>
-<p style="color:#bbb;margin-bottom:12px">${m.year} · ${m.genre} · ${m.type==="movie"?"Movie":"TV Series"}</p>
-<p style="line-height:1.7;color:#eee">${m.description}</p>
-<div style="clear:both"></div>`;
-document.getElementById("movieModal").style.display="flex";
-}
+document.getElementById("closeModal").addEventListener("click", closeModal);
 
-function closeModal(){
-document.getElementById("movieModal").style.display="none";
-}
+modal.addEventListener("click", function(event) {
+  if (event.target === modal) closeModal();
+});
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") closeModal();
+});
+
+document.getElementById("year").textContent = new Date().getFullYear();
 
 renderMovies();
 </script>
